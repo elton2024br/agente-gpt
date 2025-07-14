@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const statusEl = document.getElementById("status");
+  statusEl.textContent = "Status: Idle";
+
   // Restaurar os prompts salvos quando o popup for aberto
   chrome.storage.local.get("prompts", (data) => {
     if (data.prompts) {
@@ -15,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.storage.local.set({ prompts: rawPrompts });
 
       chrome.runtime.sendMessage({ action: "start", prompts });  // Enviar os prompts como um array de linhas
+      statusEl.textContent = "Sending prompts...";
     } else {
       alert("Please enter at least one valid prompt.");
     }
@@ -22,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById("stop").addEventListener("click", () => {
     chrome.runtime.sendMessage({ action: "stop" });  // Enviar mensagem para parar o envio dos prompts
+    statusEl.textContent = "Stopped.";
   });
 });
 

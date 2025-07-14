@@ -17,9 +17,12 @@
 </head>
 <body>
   <h2>ChatGPT Auto Sender by Anderson Mak</h2>
-  Mais Hacks no meu Canal: <a href="https://www.youtube.com/@AndersonMak" target="_blank">https://www.youtube.com/@AndersonMak</a>
-  <!-- Caixa de texto onde o usuário insere os prompts, separados por linha -->
-  <textarea id="prompts" rows="5" placeholder="Enter prompts, one per line"></textarea>
+  <p id="instructions">Enter one prompt per line then click <strong>Start Sending</strong>.</p>
+  <textarea id="prompts" rows="5" placeholder="Type a prompt on each line"></textarea>
+  <p id="status">Status: Idle</p>
+  <div style="font-size: smaller;">
+    <a href="https://www.youtube.com/@AndersonMak" target="_blank">Mais Hacks no meu Canal</a>
+  </div>
   <button id="start">Start Sending</button>
   <button id="stop">Stop Sending</button>
 
