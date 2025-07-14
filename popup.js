@@ -24,3 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ action: "stop" });  // Enviar mensagem para parar o envio dos prompts
   });
 });
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.action === "notify" && request.message) {
+    alert(request.message);
+  }
+});
