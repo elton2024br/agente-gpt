@@ -39,10 +39,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 function sendPromptToChatGPT(prompt) {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const chatGPTTab = tabs[0].id;
+      if (chrome.runtime.lastError || !tabs || tabs.length === 0) {
+        const msg = chrome.runtime.lastError ? chrome.runtime.lastError.message : "Active tab not found";
+        chrome.runtime.sendMessage({ action: "notify", message: msg });
+        return reject(msg);
+      }
+
+      const activeTab = tabs[0];
+      const url = activeTab.url || "";
+      const chatGPTRegex = /^https:\/\/chat\.openai\.com/;
+
+      if (!chatGPTRegex.test(url)) {
+        const msg = "Please open ChatGPT in the active tab.";
+        chrome.runtime.sendMessage({ action: "notify", message: msg });
+        return reject(msg);
+      }
 
       chrome.scripting.executeScript({
-        target: { tabId: chatGPTTab },
+        target: { tabId: activeTab.id },
         func: injectPrompt,
         args: [prompt]
       }, (results) => {
