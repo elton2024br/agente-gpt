@@ -1,31 +1,39 @@
 let isProcessing = false;
 let shouldStop = false;
+let delayMs = 1000; // default delay
+let currentPrompts = [];
+let promptIndex = 0;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "start") {
       shouldStop = false;
-      const prompts = request.prompts;
-      let promptIndex = 0;
+      delayMs = request.delay || 1000;
+      currentPrompts = request.prompts || [];
+      promptIndex = 0;
   
       const sendNextPrompt = () => {
-        if (promptIndex < prompts.length && !isProcessing && !shouldStop) {
+        if (promptIndex < currentPrompts.length && !isProcessing && !shouldStop) {
           isProcessing = true;
-          sendPromptToChatGPT(prompts[promptIndex])
+          sendPromptToChatGPT(currentPrompts[promptIndex])
             .then(() => {
-              console.log(`Prompt enviado com sucesso: ${prompts[promptIndex]}`);
+              console.log(`Prompt enviado com sucesso: ${currentPrompts[promptIndex]}`);
               promptIndex++;
+              chrome.runtime.sendMessage({ action: "progress", index: promptIndex, total: currentPrompts.length });
               isProcessing = false;
               if (!shouldStop) {
-                setTimeout(sendNextPrompt, 1000);
+                setTimeout(sendNextPrompt, delayMs);
               }
             })
             .catch((error) => {
               console.error("Erro ao enviar prompt:", error);
               isProcessing = false;
               if (!shouldStop) {
-                setTimeout(sendNextPrompt, 1000);
+                setTimeout(sendNextPrompt, delayMs);
               }
             });
+        }
+        else if (promptIndex >= currentPrompts.length) {
+          chrome.runtime.sendMessage({ action: "progress", index: currentPrompts.length, total: currentPrompts.length });
         }
       };
   
