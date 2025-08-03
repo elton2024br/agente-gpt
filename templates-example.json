@@ -1,0 +1,16 @@
+{
+  "templates": {
+    "Perguntas de Marketing": "Qual é a melhor estratégia de marketing digital para uma pequena empresa?\nComo posso aumentar o engajamento nas redes sociais?\nQuais são as tendências de marketing para 2024?\nComo criar uma campanha de email marketing eficaz?",
+    
+    "Perguntas de Programação": "Como otimizar o desempenho de uma aplicação React?\nQuais são as melhores práticas para segurança em APIs?\nComo implementar autenticação JWT?\nQuais são as diferenças entre TypeScript e JavaScript?",
+    
+    "Perguntas de Negócios": "Como criar um plano de negócios eficaz?\nQuais são os principais indicadores de performance para startups?\nComo fazer análise de concorrência?\nQuais são as estratégias de pricing mais eficazes?",
+    
+    "Perguntas de Produtividade": "Como gerenciar melhor o tempo de trabalho?\nQuais são as ferramentas mais eficazes para produtividade?\nComo manter o foco em projetos longos?\nQuais são as técnicas de priorização mais eficazes?",
+    
+    "Perguntas de Criatividade": "Como superar o bloqueio criativo?\nQuais são as técnicas de brainstorming mais eficazes?\nComo desenvolver um processo criativo consistente?\nQuais são as melhores práticas para design thinking?"
+  },
+  "description": "Templates de exemplo para demonstrar a funcionalidade da extensão ChatGPT Auto Sender Pro",
+  "version": "2.0",
+  "created": "2024-01-01"
+}
