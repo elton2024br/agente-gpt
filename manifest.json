@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "GPT Auto Sender by Anderson Mak",
-  "version": "1.0",
+  "name": "ChatGPT Auto Sender Pro",
+  "version": "2.0",
+  "description": "Envie prompts automaticamente para o ChatGPT com templates, configurações avançadas e interface moderna",
   "permissions": [
     "activeTab",
     "storage",
@@ -13,5 +14,10 @@
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
   }
 }

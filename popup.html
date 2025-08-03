@@ -1,30 +1,348 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ChatGPT Auto Sender by Anderson Mak</title>
+  <title>ChatGPT Auto Sender Pro</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 10px;
-      width: 800px; /* Define a largura máxima do popup */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    input, button, textarea {
-      margin: 5px 0;
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+      width: 400px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .tab-container {
+      display: flex;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      background: #f8f9fa;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .tab.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .tab:hover:not(.active) {
+      background: #e9ecef;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 13px;
+      color: #555;
+    }
+
+    textarea, input, select {
       width: 100%;
       padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 13px;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+    }
+
+    textarea:focus, input:focus, select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .settings-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .settings-row .form-group {
+      flex: 1;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .status {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status.idle {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+
+    .status.sending {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .progress-container {
+      margin-bottom: 15px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 11px;
+      color: #6c757d;
+      margin-top: 5px;
+    }
+
+    .template-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      background: #f8f9fa;
+    }
+
+    .template-name {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .template-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .btn-small {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
+
+    .footer {
+      padding: 15px 20px;
+      background: #f8f9fa;
+      border-top: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h2>ChatGPT Auto Sender by Anderson Mak</h2>
-  <p id="instructions">Enter one prompt per line then click <strong>Start Sending</strong>.</p>
-  <textarea id="prompts" rows="5" placeholder="Type a prompt on each line"></textarea>
-  <p id="status">Status: Idle</p>
-  <div style="font-size: smaller;">
-    <a href="https://www.youtube.com/@AndersonMak" target="_blank">Mais Hacks no meu Canal</a>
+  <div class="container">
+    <div class="header">
+      <h2>ChatGPT Auto Sender Pro</h2>
+      <p>Envie prompts automaticamente para o ChatGPT</p>
+    </div>
+
+    <div class="content">
+      <div class="tab-container">
+        <button class="tab active" data-tab="prompts">Prompts</button>
+        <button class="tab" data-tab="templates">Templates</button>
+        <button class="tab" data-tab="settings">Configurações</button>
+      </div>
+
+      <!-- Tab Prompts -->
+      <div id="prompts" class="tab-content active">
+        <div class="form-group">
+          <label for="prompts-textarea">Digite seus prompts (um por linha):</label>
+          <textarea id="prompts-textarea" rows="6" placeholder="Digite seu primeiro prompt aqui..."></textarea>
+        </div>
+
+        <div class="progress-container hidden" id="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-text" id="progress-text">0 de 0 enviados</div>
+        </div>
+
+        <div class="status idle" id="status">Status: Ocioso</div>
+
+        <div class="form-group">
+          <button id="start-btn" class="btn btn-primary">Iniciar Envio</button>
+          <button id="stop-btn" class="btn btn-danger" style="display: none;">Parar Envio</button>
+        </div>
+      </div>
+
+      <!-- Tab Templates -->
+      <div id="templates" class="tab-content">
+        <div class="form-group">
+          <label for="template-name">Nome do Template:</label>
+          <input type="text" id="template-name" placeholder="Ex: Perguntas de Marketing">
+        </div>
+        <div class="form-group">
+          <label for="template-content">Conteúdo do Template:</label>
+          <textarea id="template-content" rows="4" placeholder="Digite os prompts do template..."></textarea>
+        </div>
+        <div class="form-group">
+          <button id="save-template-btn" class="btn btn-primary">Salvar Template</button>
+        </div>
+        <div id="templates-list">
+          <!-- Templates serão carregados aqui -->
+        </div>
+      </div>
+
+      <!-- Tab Settings -->
+      <div id="settings" class="tab-content">
+        <div class="form-group">
+          <label for="delay-input">Delay entre prompts (segundos):</label>
+          <input type="number" id="delay-input" min="1" max="60" value="2">
+        </div>
+        <div class="form-group">
+          <label for="mode-select">Modo de envio:</label>
+          <select id="mode-select">
+            <option value="sequential">Sequencial (um por vez)</option>
+            <option value="batch">Em lote (todos de uma vez)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="auto-scroll"> Auto-scroll para novas mensagens
+          </label>
+        </div>
+        <div class="form-group">
+          <button id="export-btn" class="btn btn-secondary">Exportar Prompts</button>
+          <button id="import-btn" class="btn btn-secondary">Importar Prompts</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <a href="https://www.youtube.com/@AndersonMak" target="_blank">📺 Mais Hacks no meu Canal</a>
+    </div>
   </div>
-  <button id="start">Start Sending</button>
-  <button id="stop">Stop Sending</button>
 
   <script src="popup.js"></script>
 </body>
