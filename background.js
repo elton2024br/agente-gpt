@@ -138,7 +138,7 @@ function sendPromptToChatGPT(prompt) {
 
       const activeTab = tabs[0];
       const url = activeTab.url || "";
-      const chatGPTRegex = /^https:\/\/chat\.openai\.com/;
+      const chatGPTRegex = /^https:\/\/(chat\.openai\.com|chatgpt\.com)/;
 
       if (!chatGPTRegex.test(url)) {
         const msg = "Por favor, abra o ChatGPT na aba ativa.";
